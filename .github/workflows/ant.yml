@@ -45,4 +45,5 @@ jobs:
       run: pwd && ls
         
     - name: Build with Ant
-      run: ant -Dbasedir='/home/runner/work/jverein/jverein/jverein' -noinput -buildfile jverein/build/build.xml
+      working-directory: ./jverein
+      run: pwd && ant -noinput -buildfile build/build.xml
