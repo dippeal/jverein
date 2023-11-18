@@ -31,14 +31,14 @@ jobs:
       uses: actions/checkout@master
       with:
         repository: willuhn/jameica
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
         path: jameica
     
     - name: Check out hibiscus
       uses: actions/checkout@master
       with:
         repository: willuhn/hibiscus
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
         path: hibiscus
     
     - name: Show Working directory
