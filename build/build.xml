@@ -47,6 +47,7 @@
       </fileset>
       <pathelement path="../hibiscus/bin" />
       <pathelement path="../jameica/bin" />
+      <pathelement path="../jameica/releases/jameica-lib.jar" />
     </path>
 
     <path id="classpath">

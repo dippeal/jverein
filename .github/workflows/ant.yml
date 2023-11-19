@@ -31,7 +31,7 @@ jobs:
         
     - name: Build jameica
       working-directory: ./
-      run: ant -noinput -buildfile jameica/build/build.xml jar
+      run: ant -noinput -buildfile jameica/build/build.xml jar lib
     
     - name: Check out hibiscus
       uses: actions/checkout@main
