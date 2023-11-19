@@ -31,8 +31,6 @@
       <fileset dir="../hibiscus/lib">
         <include name="**/*.jar" />
       </fileset>
-      <pathelement path="../hibiscus/bin" />
-      <pathelement path="../jameica/bin" />
       <fileset dir="../jameica/lib">
         <include name="**/*.jar" />
         <exclude name="apache_xmlrpc/**" />
@@ -47,26 +45,38 @@
         <exclude name="swt/win32/**" />
         <exclude name="swt/win64/**" />
       </fileset>
+      <pathelement path="../hibiscus/bin" />
+      <pathelement path="../jameica/bin" />
     </path>
 
     <path id="classpath">
       <path refid="compilepath" />
-      <pathelement location="bin" />
+      <pathelement location="${class.dir}" />
     </path>
   </target>
 
   <target name="compile" depends="init, clean">
     <mkdir dir="${class.dir}" />
+	<!--
 	<echo>${toString:classpath}</echo>
 	<echo>${toString:compilepath}</echo>
 	<echoproperties/>
-    <javac debug="true" includeantruntime="false" debuglevel="lines,vars,source" source="${define.java.version}" target="${define.java.version}" encoding="${define.encoding}" deprecation="false" destdir="${class.dir}" srcdir="${src.dir}">
+	-->
+    <javac debug="true" 
+		includeantruntime="false" 
+		debuglevel="lines,vars,source" 
+		source="${define.java.version}" 
+		target="${define.java.version}" 
+		encoding="${define.encoding}" 
+		deprecation="false" 
+		failonerror="false"
+		destdir="${class.dir}" 
+		srcdir="${src.dir}">
 	  <classpath refid="compilepath" />
     </javac>
   </target>
 
   <target name="jar" depends="init,compile" description="generates the jar file">
-    <mkdir dir="${project.release}" />
     <mkdir dir="${project.zipdir}" />
     <tstamp />
     <jar destfile="${project.zipdir}/${define.jarfilename}">
@@ -131,7 +141,7 @@
     <mkdir dir="${project.release}" />
     <mkdir dir="${project.tmp}/${plugin.name}" />
     <copy todir="${project.tmp}/${plugin.name}">
-      <fileset dir=".">
+      <fileset dir="${basedir}">
         <include name=".project" />
         <include name=".classpath" />
         <include name="${src.dir}/**" />
@@ -149,6 +159,10 @@
   <target name="clean" description="cleanup">
     <delete dir="${project.tmp}" />
     <delete dir="${class.dir}" />
+
+	<dirset id="dist.contents" dir="${project.zipdir}" includes="*"/> 
+	<property name="prop.dist.contents" refid="dist.contents"/>
+	<echo>${prop.dist.contents}</echo>
   </target>
 
   <target name="all" depends="init,jar,javadoc,src,clean" description="build an official release" />
