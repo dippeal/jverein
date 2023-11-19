@@ -22,17 +22,16 @@ jobs:
         distribution: 'temurin'
         architecture: x64
 
-    - name: Checkout master
-      uses: actions/checkout@main
-      with:
-        path: jverein
-    
     - name: Check out jameica
       uses: actions/checkout@main
       with:
         repository: willuhn/jameica
         token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
         path: jameica
+        
+    - name: Build jameica
+      working-directory: ./
+      run: ant -noinput -buildfile jameica/build/build.xml
     
     - name: Check out hibiscus
       uses: actions/checkout@main
@@ -40,10 +39,19 @@ jobs:
         repository: willuhn/hibiscus
         token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
         path: hibiscus
+        
+    - name: Build hibiscus plugin
+      working-directory: ./
+      run: ant -noinput -buildfile hibiscus/build/build.xml
+
+    - name: Checkout openjverein
+      uses: actions/checkout@main
+      with:
+        path: jverein
     
     - name: Show Working directory
       run: pwd && ls
         
-    - name: Build with Ant
+    - name: Build openjverein plugin
       working-directory: ./
-      run: pwd && ant -noinput -buildfile jverein/build/build.xml
+      run: ant -noinput -buildfile jverein/build/build.xml

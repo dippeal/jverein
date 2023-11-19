@@ -69,7 +69,6 @@
 		target="${define.java.version}" 
 		encoding="${define.encoding}" 
 		deprecation="false" 
-		failonerror="false"
 		destdir="${class.dir}" 
 		srcdir="${src.dir}">
 	  <classpath refid="compilepath" />
@@ -154,10 +153,6 @@
         <include name="${plugin.name}/**" />
       </fileset>
     </zip>
-
-	<dirset id="dist.contents" dir="${project.zipdir}" includes="*"/> 
-	<property name="prop.dist.contents" refid="dist.contents"/>
-	<echo>${prop.dist.contents}</echo>
   </target>
 
   <target name="clean" description="cleanup">
