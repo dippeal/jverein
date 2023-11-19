@@ -57,6 +57,8 @@
 
   <target name="compile" depends="init, clean">
     <mkdir dir="${class.dir}" />
+	<echo>${toString:classpath}</echo>
+	<echo>${toString:compilepath}</echo>
 	<echoproperties/>
     <javac debug="true" includeantruntime="false" debuglevel="lines,vars,source" source="${define.java.version}" target="${define.java.version}" encoding="${define.encoding}" deprecation="false" destdir="${class.dir}" srcdir="${src.dir}">
 	  <classpath refid="compilepath" />
