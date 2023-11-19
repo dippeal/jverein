@@ -57,8 +57,9 @@
 
   <target name="compile" depends="init, clean">
     <mkdir dir="${class.dir}" />
+	<echoproperties/>
     <javac debug="true" includeantruntime="false" debuglevel="lines,vars,source" source="${define.java.version}" target="${define.java.version}" encoding="${define.encoding}" deprecation="false" destdir="${class.dir}" srcdir="${src.dir}">
-      <classpath refid="compilepath" />
+	  <classpath refid="compilepath" />
     </javac>
   </target>
 
@@ -80,15 +81,18 @@
         <exclude name="*.java" />
       </fileset>
     </jar>
+
     <mkdir dir="${project.zipdir}/lib" />
     <copy todir="${project.zipdir}/lib">
       <fileset dir="${lib.dir}" />
     </copy>
+
     <copy todir="${project.zipdir}" file="plugin.xml" />
     <replace file="${project.zipdir}/plugin.xml">
       <replacefilter token="[VERSION]" value="${plugin_version}"/>
       <replacefilter token="[PLUGIN_ZIP]" value="${project.zipfilename}"/>
     </replace>
+
     <!-- Jetzt muessen wir noch das ZIP-File erzeugen -->
     <zip destfile="${project.release}/${project.zipfilename}">
       <fileset dir="${project.release}">
