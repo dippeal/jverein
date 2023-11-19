@@ -154,15 +154,15 @@
         <include name="${plugin.name}/**" />
       </fileset>
     </zip>
+
+	<dirset id="dist.contents" dir="${project.zipdir}" includes="*"/> 
+	<property name="prop.dist.contents" refid="dist.contents"/>
+	<echo>${prop.dist.contents}</echo>
   </target>
 
   <target name="clean" description="cleanup">
     <delete dir="${project.tmp}" />
     <delete dir="${class.dir}" />
-
-	<dirset id="dist.contents" dir="${project.zipdir}" includes="*"/> 
-	<property name="prop.dist.contents" refid="dist.contents"/>
-	<echo>${prop.dist.contents}</echo>
   </target>
 
   <target name="all" depends="init,jar,javadoc,src,clean" description="build an official release" />
