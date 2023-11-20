@@ -57,10 +57,11 @@ jobs:
       working-directory: ./
       run: |
         ant_output=$(ant -e -q -noinput -buildfile jverein/build/build.xml nightly)
-        echo "selected_version=2.8.20" >> $GITHUB_OUTPUT
+        tmp_version="2.8.20"
+        echo "selected_version=$tmp_version" >> $GITHUB_OUTPUT
         echo "selected_filename=jverein.2.8.20-nightly.zip" >> $GITHUB_OUTPUT
         echo "selected_path=releases/nightly/jverein.2.8.20-nightly.zip" >> $GITHUB_OUTPUT
-        echo "### version: ${{ steps.openjverein.outputs.selected_version }}" >> $GITHUB_STEP_SUMMARY
+        echo "### version: $tmp_version" >> $GITHUB_STEP_SUMMARY
 
     - name: Create git release
       uses: actions/create-release@main
@@ -74,11 +75,9 @@ jobs:
 
     - name: Upload binaries to git
       uses: svenstaro/upload-release-action@v2
-      env:
-          selected_version: ${{ steps.openjverein.outputs.selected_version }}
       with:
         repo_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
-        tag: "v$selected_version"
+        tag: v${{ steps.openjverein.outputs.selected_version }}
         file: ./jverein/${{ steps.openjverein.outputs.selected_path }}
         asset_name: ${{ steps.openjverein.outputs.selected_filename }}
         overwrite: true
