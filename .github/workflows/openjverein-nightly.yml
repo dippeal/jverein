@@ -57,28 +57,28 @@ jobs:
       working-directory: ./
       run: |
         ant_output=$(ant -e -q -noinput -buildfile jverein/build/build.xml nightly)
-        sed_selected_version="$(sed -e 's/SELECTED_VERSION=//' <<< $ant_output | sed -rn 's/^([^[:blank:]]*).*$/\1/p')"
-        sed_selected_filename="$(sed -e 's/SELECTED_FILENAME=//' <<< $ant_output | sed -rn 's/^([^[:blank:]]*).*$/\1/p')"
-        sed_selected_path="$(sed -e 's/SELECTED_PATH=//' <<< $ant_output | sed -rn 's/^([^[:blank:]]*).*$/\1/p')"
-        echo "SELECTED_VERSION=$sed_selected_version" >> $GITHUB_OUTPUT
-        echo "SELECTED_FILENAME=$sed_selected_filename" >> $GITHUB_OUTPUT
-        echo "SELECTED_PATH=$sed_selected_path" >> $GITHUB_OUTPUT
+        echo "selected_version=2.8.20" >> $GITHUB_OUTPUT
+        echo "selected_filename=jverein.2.8.20-nightly.zip" >> $GITHUB_OUTPUT
+        echo "selected_path=releases/nightly/jverein.2.8.20-nightly.zip" >> $GITHUB_OUTPUT
+        echo "### version: ${{ steps.openjverein.outputs.selected_version }}" >> $GITHUB_STEP_SUMMARY
 
     - name: Create git release
       uses: actions/create-release@main
       env:
         GITHUB_TOKEN: ${{ secrets.SERVICE_ACCOUNT_PAT }}
       with:
-        tag_name: v${{ steps.openjverein.outputs.SELECTED_VERSION }}
-        release_name: v${{ steps.openjverein.outputs.SELECTED_VERSION }}
+        tag_name: v${{ steps.openjverein.outputs.selected_version }}
+        release_name: v${{ steps.openjverein.outputs.selected_version }}
         draft: false
         prerelease: true
 
     - name: Upload binaries to git
       uses: svenstaro/upload-release-action@v2
+      env:
+          selected_version: ${{ steps.openjverein.outputs.selected_version }}
       with:
         repo_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
-        file: ./jverein/${{ steps.openjverein.outputs.SELECTED_PATH }}
-        asset_name: ${{ steps.openjverein.outputs.SELECTED_FILENAME }}
-        tag: v${{ steps.openjverein.outputs.SELECTED_VERSION }}
+        tag: "v$selected_version"
+        file: ./jverein/${{ steps.openjverein.outputs.selected_path }}
+        asset_name: ${{ steps.openjverein.outputs.selected_filename }}
         overwrite: true
