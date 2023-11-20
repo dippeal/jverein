@@ -52,29 +52,26 @@ jobs:
       with:
         path: jverein
     
-    - name: Show Working directory
-      run: pwd && ls
-        
     - name: Build openjverein plugin
+      id: openjverein
       working-directory: ./
-      run: ant -noinput -buildfile jverein/build/build.xml nightly
+      run: ant -q -noinput -buildfile jverein/build/build.xml nightly >> $GITHUB_OUTPUT
 
-    - name: Create nightly release
-      id: create_release
+    - name: Create git release
       uses: actions/create-release@main
       env:
         GITHUB_TOKEN: ${{ secrets.SERVICE_ACCOUNT_PAT }}
       with:
-        tag_name: v2.8.20-nightly
-        release_name: v2.8.20-nightly
+        tag_name: v${{ steps.openjverein.outputs.SELECTED_VERSION }}
+        release_name: v${{ steps.openjverein.outputs.SELECTED_VERSION }}
         draft: false
         prerelease: true
 
-    - name: Upload binaries to release
+    - name: Upload binaries to git
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
-        file: ./jverein/releases/nightly/jverein.2.8.20-nightly.zip
-        asset_name: jverein.2.8.20-nightly.zip
-        tag: v2.8.20-nightly
+        file: ./jverein/${{ steps.openjverein.outputs.SELECTED_PATH }}
+        asset_name: ${{ steps.openjverein.outputs.SELECTED_FILENAME }}
+        tag: v${{ steps.openjverein.outputs.SELECTED_VERSION }}
         overwrite: true

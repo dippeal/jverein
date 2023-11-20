@@ -20,9 +20,9 @@
 
     <loadproperties srcfile="${build.dir}/build.properties" />
 
-  	<echo message="VERSION: ${plugin_version}" />
-    <echo message="BUILD  : ${build.number}" />
-    <echo message="JAVA   : ${java.version}" />
+  	<echo message="VERSION: ${plugin_version}" level="info"/>
+    <echo message="BUILD  : ${build.number}" level="info"/>
+    <echo message="JAVA   : ${java.version}" level="info"/>
 
     <path id="compilepath">
       <fileset dir="${lib.dir}">
@@ -59,11 +59,6 @@
 
   <target name="compile" depends="init, clean">
     <mkdir dir="${class.dir}" />
-	<!--
-	<echo>${toString:classpath}</echo>
-	<echo>${toString:compilepath}</echo>
-	<echoproperties/>
-	-->
     <javac debug="true" 
 		includeantruntime="false" 
 		debuglevel="lines,vars,source" 
@@ -182,6 +177,10 @@
     <antcall target="lib"/>
 
     <delete dir="${project.release}" />
+
+  	<echo message="SELECTED_VERSION=${plugin_version}" />
+  	<echo message="SELECTED_PATH=${project.nightly}/${project.zipfilename.nightly}" />
+  	<echo message="SELECTED_FILENAME=${project.zipfilename.nightly}" />
   </target>
 
 </project>
