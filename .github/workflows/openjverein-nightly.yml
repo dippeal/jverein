@@ -13,7 +13,7 @@ on:
 
 jobs:
   build:
-    name: Building nightly release
+    name: Building nightly release and upload to branch
 
     runs-on: ubuntu-22.04
 
@@ -59,13 +59,6 @@ jobs:
       working-directory: ./
       run: ant -noinput -buildfile jverein/build/build.xml nightly
 
-  release:
-    name: Create release
-    needs: build
-
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Create nightly release
       id: create_release
       uses: actions/create-release@main
@@ -76,17 +69,6 @@ jobs:
         release_name: v2.8.20-nightly
         draft: false
         prerelease: true
-
-    #- name: Upload Release Asset
-    #  id: upload-release-asset 
-    #  uses: actions/upload-release-asset@main
-    #  env:
-    #    GITHUB_TOKEN: ${{ secrets.SERVICE_ACCOUNT_PAT }}
-    #  with:
-    #    upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-    #    asset_path: ./jverein/releases/nightly/jverein.2.8.20-nightly.zip
-    #    asset_name: jverein.2.8.20-nightly.zip
-    #    asset_content_type: application/zip
 
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
