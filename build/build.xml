@@ -161,11 +161,27 @@
     <delete dir="${project.tmp}" />
     <delete dir="${class.dir}" />
   </target>
+  
+  <target name="lib">
+    <!-- Die Datei brauchen die anderen Plugins zum Kompilieren //-->
+    <copy file="${project.zipdir}/${define.jarfilename}" tofile="releases/jverein-lib.jar" />
+  </target>
 
   <target name="all" depends="init,jar,javadoc,src,clean" description="build an official release" />
 
   <target name="fast" depends="init,jar,src" description="Entwicklerversion bauen">
     <move file="${project.release}/${project.zipfilename}" tofile="${project.release}/${project.zipfilename}" />
+  </target>
+
+  <target name="nightly" depends="init,compile,jar,javadoc,src" description="build nightly release">
+    <mkdir dir="${project.nightly}" />
+
+    <copy file="${project.release}/${project.zipfilename}" tofile="${project.nightly}/${project.zipfilename.nightly}" />
+    <copy file="${project.release}/${define.srcfilename}" tofile="${project.nightly}/${define.srcfilename.nightly}" />
+
+    <antcall target="lib"/>
+
+    <delete dir="${project.release}" />
   </target>
 
 </project>
