@@ -70,7 +70,7 @@ jobs:
       id: create_release
       uses: actions/create-release@main
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.SERVICE_ACCOUNT_PAT }}
       with:
         tag_name: v2.8.20-nightly
         release_name: v2.8.20-nightly
@@ -81,7 +81,7 @@ jobs:
     #  id: upload-release-asset 
     #  uses: actions/upload-release-asset@main
     #  env:
-    #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #    GITHUB_TOKEN: ${{ secrets.SERVICE_ACCOUNT_PAT }}
     #  with:
     #    upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
     #    asset_path: ./jverein/releases/nightly/jverein.2.8.20-nightly.zip
@@ -91,7 +91,7 @@ jobs:
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
         file: ./jverein/releases/nightly/jverein.2.8.20-nightly.zip
         asset_name: jverein.2.8.20-nightly.zip
         tag: v2.8.20-nightly
