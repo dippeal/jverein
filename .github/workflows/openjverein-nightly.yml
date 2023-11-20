@@ -72,8 +72,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        tag_name: v2.8.20-nightly
+        release_name: v2.8.20-nightly
         draft: false
         prerelease: true
 
@@ -94,4 +94,5 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./jverein/releases/nightly/jverein.2.8.20-nightly.zip
         asset_name: jverein.2.8.20-nightly.zip
-        tag: ${{ github.ref }}
+        tag: v2.8.20-nightly
+        overwrite: true
