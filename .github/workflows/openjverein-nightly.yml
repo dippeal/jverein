@@ -55,7 +55,7 @@ jobs:
     - name: Build openjverein plugin
       id: openjverein
       working-directory: ./
-      run: ant -q -noinput -buildfile jverein/build/build.xml nightly >> $GITHUB_OUTPUT
+      run: echo "$(ant -e -q -noinput -buildfile jverein/build/build.xml nightly)" >> $GITHUB_OUTPUT
 
     - name: Create git release
       uses: actions/create-release@main
