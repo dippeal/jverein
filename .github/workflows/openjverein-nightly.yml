@@ -57,9 +57,9 @@ jobs:
       working-directory: ./
       run: |
         ant_output=$(ant -e -q -noinput -buildfile jverein/build/build.xml nightly)
-        echo "$(echo -n grep "^SELECTED_VERSION" $ant_output)" >> ${GITHUB_OUTPUT}
-        echo "$(echo -n grep "^SELECTED_PATH" $ant_output)" >> ${GITHUB_OUTPUT}
-        echo "$(echo -n grep "^SELECTED_FILENAME" $ant_output)" >> ${GITHUB_OUTPUT}
+        echo "$(echo -n $ant_output | grep '^SELECTED_VERSION')" >> ${GITHUB_OUTPUT}
+        echo "$(echo -n $ant_output | grep '^SELECTED_PATH')" >> ${GITHUB_OUTPUT}
+        echo "$(echo -n $ant_output | grep '^SELECTED_FILENAME')" >> ${GITHUB_OUTPUT}
 
     - name: Create git release
       uses: actions/create-release@main
