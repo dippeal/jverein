@@ -57,9 +57,12 @@ jobs:
       working-directory: ./
       run: |
         ant_output=$(ant -e -q -noinput -buildfile jverein/build/build.xml nightly)
-        echo "SELECTED_VERSION=$(echo -n $ant_output | sed 's/SELECTED_VERSION=//')" >> $GITHUB_OUTPUT
-        echo "SELECTED_FILENAME=$(echo -n $ant_output | sed 's/SELECTED_FILENAME=//')" >> $GITHUB_OUTPUT
-        echo "SELECTED_PATH=$(echo -n $ant_output | sed 's/SELECTED_PATH=//')" >> $GITHUB_OUTPUT
+        sed_selected_version="$(sed -e 's/SELECTED_VERSION=//' <<< $ant_output | sed -rn 's/^([^[:blank:]]*).*$/\1/p')"
+        sed_selected_filename="$(sed -e 's/SELECTED_FILENAME=//' <<< $ant_output | sed -rn 's/^([^[:blank:]]*).*$/\1/p')"
+        sed_selected_path="$(sed -e 's/SELECTED_PATH=//' <<< $ant_output | sed -rn 's/^([^[:blank:]]*).*$/\1/p')"
+        echo "SELECTED_VERSION=$sed_selected_version" >> $GITHUB_OUTPUT
+        echo "SELECTED_FILENAME=$sed_selected_filename" >> $GITHUB_OUTPUT
+        echo "SELECTED_PATH=$sed_selected_path" >> $GITHUB_OUTPUT
 
     - name: Create git release
       uses: actions/create-release@main
