@@ -57,7 +57,6 @@ jobs:
       working-directory: ./
       run: |
         ant_output=$(ant -e -q -noinput -buildfile jverein/build/build.xml nightly)
-        echo $ant_output
 
         ssa="SELECTED_VERSION="
         ssb=".zip"
