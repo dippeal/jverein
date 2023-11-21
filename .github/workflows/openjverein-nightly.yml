@@ -63,10 +63,21 @@ jobs:
         text="${text%${ssb}*}.zip"
         tmp_version=$(echo $text | sed -rn 's/^([^[:blank:]]*).*$/\1/p')
 
+        ssa="SELECTED_FILENAME="
+        text="${ant_output#*${ssa}}"
+        text="${text%${ssb}*}.zip"
+        tmp_filename=$(echo $text | sed -rn 's/^([^[:blank:]]*).*$/\1/p')
+
+        ssa="SELECTED_PATH="
+        text="${ant_output#*${ssa}}"
+        text="${text%${ssb}*}.zip"
+        tmp_path=$(echo $text | sed -rn 's/^([^[:blank:]]*).*$/\1/p')
+
         echo "selected_version=$tmp_version" >> $GITHUB_OUTPUT
-        echo "selected_filename=jverein.2.8.20-nightly.zip" >> $GITHUB_OUTPUT
-        echo "selected_path=releases/nightly/jverein.2.8.20-nightly.zip" >> $GITHUB_OUTPUT
-        echo "### version: $tmp_version" >> $GITHUB_STEP_SUMMARY
+        echo "selected_filename=$tmp_filename" >> $GITHUB_OUTPUT
+        echo "selected_path=$tmp_path" >> $GITHUB_OUTPUT
+
+        echo "### version: $tmp_version | filename: $tmp_filename | path: $tmp_path" >> $GITHUB_STEP_SUMMARY
 
     - name: Create git release
       uses: actions/create-release@main
@@ -74,7 +85,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.SERVICE_ACCOUNT_PAT }}
       with:
         tag_name: v${{ steps.openjverein.outputs.selected_version }}
-        release_name: v${{ steps.openjverein.outputs.selected_version }}
+        release_name: Nightly release ${{ steps.openjverein.outputs.selected_version }}
         draft: false
         prerelease: true
 
