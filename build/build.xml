@@ -105,6 +105,7 @@
   <target name="javadoc" depends="init" description="creates the api doc">
     <mkdir dir="${project.javadoc}" />
     <javadoc destdir="${project.javadoc}" packagenames="${define.package}.*" encoding="${define.encoding}">
+      <arg value="-Xdoclint:none"/>
       <classpath refid="compilepath" />
       <sourcepath>
         <pathelement location="${src.dir}" />
