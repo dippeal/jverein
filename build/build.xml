@@ -59,19 +59,9 @@
 
   <target name="compile" depends="init, clean">
     <mkdir dir="${class.dir}" />
-    <javac debug="true" 
-      includeantruntime="false" 
-      debuglevel="lines,vars,source" 
-      source="${define.java.version}" 
-      target="${define.java.version}" 
-      encoding="${define.encoding}" 
-      deprecation="false" 
-      destdir="${class.dir}" 
-      srcdir="${src.dir}"
-      nowarn="on">
-      <classpath refid="compilepath" />
-      <compilerarg value="-Xlint:none"/>
-    </javac>
+    <javac debug="true" includeantruntime="false" debuglevel="lines,vars,source" source="${define.java.version}" target="${define.java.version}" encoding="${define.encoding}" deprecation="true" destdir="${class.dir}" srcdir="${src.dir}">
+			<classpath refid="compilepath" />
+		</javac>
   </target>
 
   <target name="jar" depends="init,compile" description="generates the jar file">
@@ -116,7 +106,6 @@
     <mkdir dir="${project.javadoc}" />
     <javadoc destdir="${project.javadoc}" packagenames="${define.package}.*" encoding="${define.encoding}">
       <classpath refid="compilepath" />
-      <arg value="-Xdoclint:none"/>
       <sourcepath>
         <pathelement location="${src.dir}" />
       </sourcepath>
