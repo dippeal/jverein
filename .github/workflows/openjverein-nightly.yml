@@ -79,21 +79,15 @@ jobs:
 
         echo "### version: $tmp_version | filename: $tmp_filename | path: $tmp_path" >> $GITHUB_STEP_SUMMARY
 
-    - name: Create git release
-      uses: actions/create-release@main
-      env:
-        GITHUB_TOKEN: ${{ secrets.SERVICE_ACCOUNT_PAT }}
+    - name: Create nightly release and upload binaries
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: v${{ steps.openjverein.outputs.selected_version }}
-        release_name: Nightly release ${{ steps.openjverein.outputs.selected_version }}
-        draft: false
+        allowUpdates: true
+        artifactErrorsFailBuild: true
+        artifacts: ./jverein/${{ steps.openjverein.outputs.selected_path }}
+        artifactContentType: "application/zip"
+        generateReleaseNotes: true
+        name: Nightly release v${{ steps.openjverein.outputs.selected_version }}-nightly
         prerelease: true
-
-    - name: Upload binaries to git
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
-        tag: v${{ steps.openjverein.outputs.selected_version }}
-        file: ./jverein/${{ steps.openjverein.outputs.selected_path }}
-        asset_name: ${{ steps.openjverein.outputs.selected_filename }}
-        overwrite: true
+        tag: v${{ steps.openjverein.outputs.selected_version }}-nightly
+        token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
