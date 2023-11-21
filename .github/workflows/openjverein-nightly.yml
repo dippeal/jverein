@@ -57,6 +57,7 @@ jobs:
       working-directory: ./
       run: |
         ant_output=$(ant -e -q -noinput -buildfile jverein/build/build.xml nightly)
+        echo $ant_output
 
         ssa="SELECTED_VERSION="
         ssb=".zip"
@@ -78,7 +79,7 @@ jobs:
         echo "selected_filename=$tmp_filename" >> $GITHUB_OUTPUT
         echo "selected_path=$tmp_path" >> $GITHUB_OUTPUT
 
-        builddatetime=$(date +'%Y-%m-%d %H:%M')"
+        builddatetime=$(date +'%Y-%m-%d %H:%M')
         echo "### Version: $tmp_version | filename: $tmp_filename | build datetime: $builddatetime" >> $GITHUB_STEP_SUMMARY
 
     - name: Create nightly release and upload binaries
