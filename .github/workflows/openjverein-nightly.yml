@@ -15,7 +15,7 @@ jobs:
   build:
     name: Building nightly release and upload to branch
 
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
 
     steps:
     - name: Set up JDK 11 for x64
@@ -57,6 +57,8 @@ jobs:
       working-directory: ./
       run: |
         ant_output=$(ant -e -q -noinput -buildfile jverein/build/build.xml nightly)
+        echo $ant_output
+        
         ssa="SELECTED_VERSION="
         ssb=".zip"
         text="${ant_output#*${ssa}}"
@@ -77,7 +79,8 @@ jobs:
         echo "selected_filename=$tmp_filename" >> $GITHUB_OUTPUT
         echo "selected_path=$tmp_path" >> $GITHUB_OUTPUT
 
-        echo "### version: $tmp_version | filename: $tmp_filename | path: $tmp_path" >> $GITHUB_STEP_SUMMARY
+        echo "builddatetime=$(date +'%Y-%m-%d %H:%M')" >> $GITHUB_OUTPUT
+        echo "### Version: $tmp_version | filename: $tmp_filename | build datetime: $builddatetime" >> $GITHUB_STEP_SUMMARY
 
     - name: Create nightly release and upload binaries
       uses: ncipollo/release-action@v1
@@ -87,7 +90,7 @@ jobs:
         artifacts: ./jverein/${{ steps.openjverein.outputs.selected_path }}
         artifactContentType: "application/zip"
         generateReleaseNotes: true
-        name: Nightly release v${{ steps.openjverein.outputs.selected_version }}-nightly
+        name: Nightly release v${{ steps.openjverein.outputs.selected_version }}
         prerelease: true
         tag: v${{ steps.openjverein.outputs.selected_version }}-nightly
         token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
