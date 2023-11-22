@@ -154,24 +154,28 @@
     <copy file="${project.zipdir}/${define.jarfilename}" tofile="releases/jverein-lib.jar" />
   </target>
 
-  <target name="all" depends="init,jar,javadoc,src,clean" description="build an official release" />
+  <target name="all" depends="init,jar,javadoc,src,clean" description="build an official release">
+  	<echo message="SELECTED_VERSION=${plugin_version}" />
+  	<echo message="SELECTED_PATH=${project.release}/${project.zipfilename}" />
+  	<echo message="SELECTED_FILENAME=${project.zipfilename}" />
+  </target>
 
   <target name="fast" depends="init,jar,src" description="Entwicklerversion bauen">
     <move file="${project.release}/${project.zipfilename}" tofile="${project.release}/${project.zipfilename}" />
   </target>
 
   <target name="nightly" depends="init,compile,jar,javadoc,src" description="build nightly release">
-    <mkdir dir="${project.nightly}" />
+    <mkdir dir="${project.release.nightly}" />
 
-    <copy file="${project.release}/${project.zipfilename}" tofile="${project.nightly}/${project.zipfilename.nightly}" />
-    <copy file="${project.release}/${define.srcfilename}" tofile="${project.nightly}/${define.srcfilename.nightly}" />
+    <copy file="${project.release}/${project.zipfilename}" tofile="${project.release.nightly}/${project.zipfilename.nightly}" />
+    <copy file="${project.release}/${define.srcfilename}" tofile="${project.release.nightly}/${define.srcfilename.nightly}" />
 
     <antcall target="lib"/>
 
     <delete dir="${project.release}" />
 
   	<echo message="SELECTED_VERSION=${plugin_version}" />
-  	<echo message="SELECTED_PATH=${project.nightly}/${project.zipfilename.nightly}" />
+  	<echo message="SELECTED_PATH=${project.release.nightly}/${project.zipfilename.nightly}" />
   	<echo message="SELECTED_FILENAME=${project.zipfilename.nightly}" />
   </target>
 
