@@ -174,7 +174,7 @@
 
     <delete dir="${project.release}" />
 
-  	<echo message="SELECTED_VERSION=${plugin_version}" />
+  	<echo message="SELECTED_VERSION=${plugin_version}-nightly" />
   	<echo message="SELECTED_PATH=${project.release.nightly}/${project.zipfilename.nightly}" />
   	<echo message="SELECTED_FILENAME=${project.zipfilename.nightly}" />
   </target>

@@ -1,23 +1,19 @@
 # This workflow will build a Java project with Ant
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-ant
 
-name: openjverein nightly release
+name: openjverein release
 
 on:
   push:
     branches: 
       - master
-    tags: 
-      - '!**'
   pull_request:
-    branches:
-      - master
     types: 
       - closed
 
 jobs:
   build:
-    name: Building nightly release and upload to branch
+    name: Building release and upload to branch
 
     runs-on: ubuntu-latest
 
@@ -52,11 +48,13 @@ jobs:
       run: ant -noinput -buildfile hibiscus/build/build.xml nightly
 
     - name: Checkout openjverein
+      id: openjverein_checkout
       uses: actions/checkout@main
       with:
         path: jverein
     
     - name: Build openjverein plugin
+      if: ${{ !startsWith(github.event.ref, 'refs/tags/v') }}
       id: openjverein
       working-directory: ./
       run: |
@@ -68,6 +66,7 @@ jobs:
         text="${ant_output#*${ssa}}"
         text="${text%${ssb}*}.zip"
         tmp_version=$(echo $text | sed -rn 's/^([^[:blank:]]*).*$/\1/p')
+        tmp_version=$tmp_version
 
         ssa="SELECTED_FILENAME="
         text="${ant_output#*${ssa}}"
@@ -79,7 +78,7 @@ jobs:
         text="${text%${ssb}*}.zip"
         tmp_path=$(echo $text | sed -rn 's/^([^[:blank:]]*).*$/\1/p')
 
-        echo "selected_version=$tmp_version" >> $GITHUB_OUTPUT
+        echo "selected_version=${tmp_version}-nightly" >> $GITHUB_OUTPUT
         echo "selected_filename=$tmp_filename" >> $GITHUB_OUTPUT
         echo "selected_path=$tmp_path" >> $GITHUB_OUTPUT
 
@@ -88,11 +87,11 @@ jobs:
 
     - uses: dev-drprasad/delete-tag-and-release@master
       with:
-        tag_name: v${{ steps.openjverein.outputs.selected_version }}-nightly
+        tag_name: v${{ steps.openjverein.outputs.selected_version }}
         github_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
         delete_release: true
 
-    - name: Create nightly release and upload binaries
+    - name: Create release and upload binaries
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
@@ -100,7 +99,7 @@ jobs:
         artifacts: ./jverein/${{ steps.openjverein.outputs.selected_path }}
         artifactContentType: "application/zip"
         generateReleaseNotes: true
-        name: Nightly release v${{ steps.openjverein.outputs.selected_version }}
+        name: Release v${{ steps.openjverein.outputs.selected_version }}
         prerelease: true
-        tag: v${{ steps.openjverein.outputs.selected_version }}-nightly
+        tag: v${{ steps.openjverein.outputs.selected_version }}
         token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
