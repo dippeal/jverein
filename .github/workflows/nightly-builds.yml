@@ -86,12 +86,17 @@ jobs:
         builddatetime=$(date +'%Y-%m-%d %H:%M')
         echo "### Version: $tmp_version | filename: $tmp_filename | build datetime: $builddatetime" >> $GITHUB_STEP_SUMMARY
 
+    - name: Delete release
+      uses: cb80/delrel@latest
+      with:
+        tag: v${{ steps.openjverein.outputs.selected_version }}
+        token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
+    
     - name: Delete tag
       uses: dev-drprasad/delete-tag-and-release@master
       with:
         tag_name: v${{ steps.openjverein.outputs.selected_version }}
         github_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
-        delete_release: true
 
     - name: Create release and upload binaries
       uses: ncipollo/release-action@main
