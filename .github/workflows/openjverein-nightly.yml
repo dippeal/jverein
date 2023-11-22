@@ -5,11 +5,15 @@ name: openjverein nightly release
 
 on:
   push:
-    branches: [ master ]
+    branches: 
+      - master
+    tags: 
+      - '!**'
   pull_request:
-    types: [ closed ]
     branches:
-      [ master ]
+      - master
+    types: 
+      - closed
 
 jobs:
   build:

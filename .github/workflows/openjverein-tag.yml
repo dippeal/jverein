@@ -5,8 +5,11 @@ name: openjverein official release
 
 on:
   push:
-    tags:        
+    branches: 
+      - master
+    tags:
       - 'v*'
+      - '!**-nightly'
 
 jobs:
   build:
