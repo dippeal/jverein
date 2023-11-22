@@ -85,11 +85,8 @@ jobs:
         artifactErrorsFailBuild: true
         artifacts: ./jverein/${{ steps.openjverein.outputs.selected_path }}
         artifactContentType: "application/zip"
-        draft: false
         generateReleaseNotes: true
         name: Release v${{ steps.openjverein.outputs.selected_version }}
-        omitDraftDuringUpdate: true
-        omitPrereleaseDuringUpdate: false
         prerelease: false
         tag: v${{ steps.openjverein.outputs.selected_version }}
         token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
