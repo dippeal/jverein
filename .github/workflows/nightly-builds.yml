@@ -96,11 +96,15 @@ jobs:
     - name: Create release and upload binaries
       uses: ncipollo/release-action@main
       with:
+        allowUpdates: true
         artifactErrorsFailBuild: true
         artifacts: ./jverein/${{ steps.openjverein.outputs.selected_path }}
         artifactContentType: "application/zip"
+        draft: false
         generateReleaseNotes: true
         name: Release v${{ steps.openjverein.outputs.selected_version }}
+        omitDraftDuringUpdate: false
+        omitPrereleaseDuringUpdate: false
         prerelease: true
         tag: v${{ steps.openjverein.outputs.selected_version }}
         token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
