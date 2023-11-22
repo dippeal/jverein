@@ -83,6 +83,6 @@ jobs:
       with:
         repo_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
         automatic_release_tag: ${{ steps.openjverein.outputs.selected_version }}
-        prerelease: true
+        prerelease: false
         title: Release ${{ steps.openjverein.outputs.selected_version }}
         files: ./jverein/${{ steps.openjverein.outputs.selected_path }}
