@@ -87,6 +87,6 @@ jobs:
         artifactContentType: "application/zip"
         generateReleaseNotes: true
         name: Release v${{ steps.openjverein.outputs.selected_version }}
-        prerelease: true
+        prerelease: false
         tag: v${{ steps.openjverein.outputs.selected_version }}
         token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
