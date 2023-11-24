@@ -79,7 +79,7 @@ jobs:
     - name: Create release and publish
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
         automatic_release_tag: ${{ steps.openjverein.outputs.selected_version }}
         prerelease: false
         title: Release ${{ steps.openjverein.outputs.selected_version }}
