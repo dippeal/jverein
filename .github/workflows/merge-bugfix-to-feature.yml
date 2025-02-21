@@ -1,0 +1,21 @@
+name: Merge master branch bugfix into feature branch
+
+on:
+  push:
+    branches:
+      - 'master'
+    paths-ignore:
+      - plugin.xml
+jobs:
+  merge-branch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Merge master -> feature-3.1.0
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          target_branch: feature-3.1.0
+          message: Merge master into feature-3.1.0
+          github_token: ${{ secrets.GITHUB_TOKEN }}
