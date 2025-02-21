@@ -10,13 +10,21 @@ jobs:
   merge-branch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout openjverein
+        uses: actions/checkout@v4
 
-      - name: Merge master -> feature-3.1.0
-        uses: mtanzi/action-automerge@v1
-        id: merge-master-feature-310
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source: 'master'
-          target: 'feature-3.1.0'
-          webhook_url: #if present add the Slack webhook
+      - name: Set Git config
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "Github Actions"
+
+      - name: Merge master into feature-3.1.0
+        run: |
+            git fetch --unshallow
+            git checkout feature-3.1.0
+            git pull
+            git merge master --no-ff --no-commit
+            git merge --abort
+            git status
+            git merge -s ours master -m "Auto-merge master into feature-3.1.0"
+            git push
