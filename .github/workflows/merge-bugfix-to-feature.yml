@@ -24,14 +24,12 @@ jobs:
           git checkout feature-3.1.0
           git pull
           git merge master --no-ff --no-commit
-          git merge --abort
-          git reset --hard HEAD
-          git status
 
       - name: Merge master into feature-3.1.0
         if: always()
         run: |
-          git checkout feature-3.1.0
-          git pull
+          git merge --abort
+          git reset --hard HEAD
+          git status
           git merge -X ours master -m "Auto-merge master into feature-3.1.0" --stat
           git push origin
