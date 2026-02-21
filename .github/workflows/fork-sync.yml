@@ -1,0 +1,39 @@
+name: Mirror Upstream Branches
+
+on:
+  schedule:
+    - cron: "0 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mirror selected branches
+        run: |
+          set -e
+
+          git remote add upstream https://github.com/openjverein/jverein.git
+          git fetch upstream --prune
+
+          for BRANCH in master 3.2 4.0; do
+            echo "Mirroring $BRANCH"
+
+            # Branch lokal erstellen falls nicht vorhanden
+            git checkout -B $BRANCH
+
+            # Hart auf Upstream setzen
+            git reset --hard upstream/$BRANCH
+
+            # Force Push zum Fork
+            git push --force origin $BRANCH
+          done
