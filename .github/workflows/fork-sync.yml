@@ -20,6 +20,14 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
 
+      - name: Configure Git Auth
+        run: |
+          git config user.name "mirror-bot"
+          git config user.email "mirror-bot@users.noreply.github.com"
+
+          # Remote explizit mit PAT setzen
+          git remote set-url origin https://x-access-token:${{ secrets.SERVICE_ACCOUNT_PAT }}@github.com/dippeal/jverein.git
+
       - name: Mirror selected branches
         run: |
           set -e
