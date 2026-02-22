@@ -1,49 +1,52 @@
-name: Mirror Upstream Branches
+name: Fork Sync
 
 on:
   schedule:
-    - cron: "23 8-23/2 * * *"
+    - cron: '21 */2 * * *'  # alle 2 Stunden
   workflow_dispatch:
 
 permissions:
   contents: write
-  actions: write
 
 jobs:
-  mirror:
+  sync:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout fork-sync branch
         uses: actions/checkout@v4
         with:
+          ref: fork-sync
           fetch-depth: 0
-          token: ${{ secrets.SERVICE_ACCOUNT_PAT }}
 
-      - name: Configure Git Auth
+      - name: Set up git user
         run: |
-          git config user.name "mirror-bot"
-          git config user.email "mirror-bot@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Remote explizit mit PAT setzen
-          git remote set-url origin https://x-access-token:${{ secrets.SERVICE_ACCOUNT_PAT }}@github.com/dippeal/jverein.git
-
-      - name: Mirror selected branches
+      - name: Add upstream
         run: |
-          set -e
-
           git remote add upstream https://github.com/openjverein/jverein.git
           git fetch upstream --prune
 
-          for BRANCH in master 3.2 4.0; do
-            echo "Mirroring $BRANCH"
+      - name: Reset master to upstream/master
+        run: |
+          git checkout master
+          git reset --hard upstream/master
+          git push origin master --force
 
-            # Branch lokal erstellen falls nicht vorhanden
-            git checkout -B $BRANCH
+      - name: Reset 4.0 to upstream/4.0
+        run: |
+          if git ls-remote --exit-code upstream 4.0; then
+            git checkout 4.0 || git checkout -b 4.0
+            git reset --hard upstream/4.0
+            git push origin 4.0 --force
+          fi
 
-            # Hart auf Upstream setzen
-            git reset --hard upstream/$BRANCH
-
-            # Force Push zum Fork
-            git push --force origin $BRANCH
-          done
+      - name: Reset 3.2 to upstream/3.2
+        run: |
+          if git ls-remote --exit-code upstream 3.2; then
+            git checkout 3.2 || git checkout -b 3.2
+            git reset --hard upstream/3.2
+            git push origin 3.2 --force
+          fi
