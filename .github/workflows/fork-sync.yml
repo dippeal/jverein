@@ -2,7 +2,7 @@ name: Fork Sync
 
 on:
   schedule:
-    - cron: '21 */2 * * *'  # alle 2 Stunden
+    - cron: '21 */2 * * *'
   workflow_dispatch:
 
 permissions:
@@ -31,14 +31,14 @@ jobs:
 
       - name: Reset master to upstream/master
         run: |
-          git checkout master
+          git checkout --track origin/master || git checkout master
           git reset --hard upstream/master
           git push origin master --force
 
       - name: Reset 4.0 to upstream/4.0
         run: |
           if git ls-remote --exit-code upstream 4.0; then
-            git checkout 4.0 || git checkout -b 4.0
+            git checkout --track origin/4.0 || git checkout 4.0 || git checkout -b 4.0
             git reset --hard upstream/4.0
             git push origin 4.0 --force
           fi
@@ -46,7 +46,7 @@ jobs:
       - name: Reset 3.2 to upstream/3.2
         run: |
           if git ls-remote --exit-code upstream 3.2; then
-            git checkout 3.2 || git checkout -b 3.2
+            git checkout --track origin/3.2 || git checkout 3.2 || git checkout -b 3.2
             git reset --hard upstream/3.2
             git push origin 3.2 --force
           fi
