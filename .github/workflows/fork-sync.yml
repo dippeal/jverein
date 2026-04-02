@@ -37,6 +37,7 @@ jobs:
           git push origin master --force
 
       - name: Reset 4.0 to upstream/4.0
+        if: always()
         run: |
           if git ls-remote --exit-code upstream 4.0; then
             git checkout --track origin/4.0 || git checkout 4.0 || git checkout -b 4.0
@@ -45,6 +46,7 @@ jobs:
           fi
 
       - name: Reset 4.1 to upstream/4.1
+        if: always()
         run: |
           if git ls-remote --exit-code upstream 4.1; then
             git checkout --track origin/4.1 || git checkout 4.1 || git checkout -b 4.1
