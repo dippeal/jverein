@@ -44,10 +44,10 @@ jobs:
             git push origin 4.0 --force
           fi
 
-      - name: Reset 3.2 to upstream/3.2
+      - name: Reset 4.1 to upstream/4.1
         run: |
-          if git ls-remote --exit-code upstream 3.2; then
-            git checkout --track origin/3.2 || git checkout 3.2 || git checkout -b 3.2
-            git reset --hard upstream/3.2
-            git push origin 3.2 --force
+          if git ls-remote --exit-code upstream 4.1; then
+            git checkout --track origin/4.1 || git checkout 4.1 || git checkout -b 4.1
+            git reset --hard upstream/4.1
+            git push origin 4.1 --force
           fi
