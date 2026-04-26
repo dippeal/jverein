@@ -19,11 +19,16 @@ jobs:
         with:
           ref: fork-sync
           fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Set up git user
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Authenticate git with PAT
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}
 
       - name: Add upstream
         run: |
